@@ -1,4 +1,4 @@
-// ET-DES-TopLevel-v0.1-al2718-tg2026.sv
+// ET-DES-TopLevel-v0.2-al2718-tg2026.sv
 
 module energy_tracker (
     input  logic        CLOCK_50,
@@ -73,9 +73,19 @@ module energy_tracker (
         end
     end
 
-    // Version 1: LED bar graph not yet implemented
+    // LED bar graph: 1 LED per 1Wh, all LEDs on at 10Wh
     always_comb begin
-        LEDR = 10'b0000000000;
+        if      (display_val >= 32'd10) LEDR = 10'b1111111111;
+        else if (display_val >= 32'd9)  LEDR = 10'b0111111111;
+        else if (display_val >= 32'd8)  LEDR = 10'b0011111111;
+        else if (display_val >= 32'd7)  LEDR = 10'b0001111111;
+        else if (display_val >= 32'd6)  LEDR = 10'b0000111111;
+        else if (display_val >= 32'd5)  LEDR = 10'b0000011111;
+        else if (display_val >= 32'd4)  LEDR = 10'b0000001111;
+        else if (display_val >= 32'd3)  LEDR = 10'b0000000111;
+        else if (display_val >= 32'd2)  LEDR = 10'b0000000011;
+        else if (display_val >= 32'd1)  LEDR = 10'b0000000001;
+        else                            LEDR = 10'b0000000000;
     end
 
     // BCD conversion via double dabble (6 digits, 32-bit input)
